@@ -1,6 +1,14 @@
-var http = require('http')
+var http = require('http');
+var url = require('url');
+
 var port = process.env.PORT || 1337;
-http.createServer(function(req, res) {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('Hi, Hyo\nI am running on node.js\n');
-}).listen(port);
+
+function start(route, handle) {
+	http.createServer(function(req, res) {
+		var pathname = url.parse(req.url).pathname;
+		console.log("Request for " + pathname + " received.");
+
+		route(handle, pathname, res);
+	}).listen(port);
+}
+exports.start = start;
